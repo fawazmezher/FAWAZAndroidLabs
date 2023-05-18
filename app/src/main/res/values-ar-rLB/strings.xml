@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">FAWAZ\'s Android Labs</string>
+    <string name="hello_message">kifak world</string>
+    <string name="button_message">ana button</string>
+</resources>
