@@ -6,6 +6,10 @@ android {
     namespace 'algonquin.cst2335.mezh0013'
     compileSdk 33
 
+    buildFeatures {
+        viewBinding true
+    }
+
     defaultConfig {
         applicationId "algonquin.cst2335.mezh0013"
         minSdk 22
