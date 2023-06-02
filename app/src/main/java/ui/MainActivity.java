@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         imgView = findViewById(R.id.flagView);
-        sw = findViewById(R.id.spin_switch);
+        sw = findViewById(R.id.spin_Switch);
 
         sw.setOnCheckedChangeListener((btn, isChecked) -> {
             if (isChecked)
