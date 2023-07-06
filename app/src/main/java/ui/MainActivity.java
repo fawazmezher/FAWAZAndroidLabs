@@ -22,87 +22,121 @@ import algonquin.cst2335.mezh0013.R;
 import algonquin.cst2335.mezh0013.data.MainViewModel;
 import algonquin.cst2335.mezh0013.databinding.ActivityMainBinding;
 
+
+/**
+ * @author Fawaz Mezher
+ * @version 1.0
+ */
 public class MainActivity extends AppCompatActivity {
-    private static String TAG = "MainActivity";
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Log.w("MainActivity", "In onCreate() - Loading Widgets");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Log.w("MainActivity", "In onCreate() - Loading Widgets");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.w("MainActivity", "In onCreate() - Loading Widgets");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.w("MainActivity", "In onCreate() - Loading Widgets");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.w("MainActivity", "In onCreate() - Loading Widgets");
+    /**
+     * This method is used in checking for special characters
+     *
+     * @param c object through which this method checks for special characters
+     * @return returns true if specifications are met
+     */
+    boolean isSpecialCharacter(char c) {
+        switch (c) {
+            case '#':
+            case '?':
+            case '*':
+            case '@':
+            case '%':
+            case '^':
+            case '&':
+            case '!':
+                return true;
+            default:
+                return false;
+        }
     }
 
 
+    /**
+     * This method checks if password complexity input by a user, meets the requirements
+     *
+     * @param password string object through which this method checks if password
+     *                 complexity, meets requirements.
+     * @return Returns true if password typed in meets requirements
+     */
+    boolean CheckPasswordComplexity(String password) {
+        TextView tv = findViewById(R.id.textView);
+
+        boolean foundUpperCase, foundLowerCase, foundNumber, foundSpecial;
+
+        foundUpperCase = foundLowerCase = foundNumber = foundSpecial = false;
+
+        for (int i = 0; i < password.length(); i++) {
+            char c = password.charAt(i);
+            if (Character.isDigit(c)) {
+                foundNumber = true;
+            } else if (Character.isUpperCase(c)) {
+                foundUpperCase = true;
+            } else if (Character.isLowerCase(c)) {
+                foundLowerCase = true;
+            } else if (isSpecialCharacter(c)) {
+                foundSpecial = true;
+            }
+        }
+        /**
+         * method for when uppercase is missing from the password
+         */
+        if (!foundUpperCase) {
+            tv.setText("You shall not pass");
+            Toast.makeText(getApplicationContext(), "an upper case is missing", Toast.LENGTH_SHORT).show();
+
+            return false;
+            /**
+             * method for when lowercase is missing from the password
+             */
+        } else if (!foundLowerCase) {
+            tv.setText("You shall not pass");
+            Toast.makeText(getApplicationContext(), "a lower case is missing", Toast.LENGTH_SHORT).show();
+
+            return false;
+            /**
+             * method for when a number is missing from the password
+             */
+        } else if (!foundNumber) {
+            tv.setText("You shall not pass");
+            Toast.makeText(getApplicationContext(), "a number character is missing", Toast.LENGTH_SHORT).show();
+
+            return false;
+            /**
+             * method for when special character is missing from the password
+             */
+        } else if (!foundSpecial) {
+            Toast.makeText(getApplicationContext(), "you are missing a special character", Toast.LENGTH_SHORT).show();
+            tv.setText("You shall not pass");
+            return false;
+            /**
+             * method for when password meets criteria
+             */
+        } else
+            tv.setText("You shall pass");
+        return true;
+
+    }
+
+    /**
+     * This function contains declared variables and calls function for checking password complexity
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Log.w("MainActivity", "In onCreate() - Loading Widgets");
-        Log.d(TAG, "Message");
-        Intent nextPage = new Intent(MainActivity.this, SecondActivity.class);
 
+        TextView tv = findViewById(R.id.textView);
+        EditText et = findViewById(R.id.editText);
+        Button btn = findViewById(R.id.button);
 
-        Button button = (Button) findViewById(R.id.button);
-        EditText email = findViewById(R.id.emailEditText);
-        EditText emailEditText = (EditText) findViewById(R.id.emailEditText);
-        EditText password = findViewById(R.id.passwordEditText);
+        btn.setOnClickListener(clk -> {
+            String password = et.getText().toString();
 
-        SharedPreferences prefs = getSharedPreferences("MyData", Context.MODE_PRIVATE);
-        String emailAddress = prefs.getString("LoginName", "");
-
-        email.setText(prefs.getString("LoginName", ""));
-
-
-        button.setOnClickListener(clk -> {
-            String getEmail = email.getText().toString();
-            String getPassword = password.getText().toString();
-
-            if (getEmail.trim().equals("") || getPassword.trim().equals("")) {
-                Toast.makeText(getApplicationContext(), "Enter Right Credentials", Toast.LENGTH_SHORT).show();
-            } else {
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("email", getEmail);
-                editor.putString("password", getPassword);
-                editor.apply();
-                Toast.makeText(getApplicationContext(), "Logged in", Toast.LENGTH_SHORT).show();
-                nextPage.putExtra("EmailAddress", ((EditText) emailEditText).getText().toString());
-                startActivity(nextPage);
-                return;
-
-            }
-
-//            SharedPreferences.Editor editor = prefs.edit();
-//            editor.putString("LoginName", "");
-//
-//
-//            startActivity(nextPage);
+            CheckPasswordComplexity(password);
 
         });
-
-
     }
 }

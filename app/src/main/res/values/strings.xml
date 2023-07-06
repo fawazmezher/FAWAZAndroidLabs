@@ -1,10 +1,5 @@
 <resources>
     <string name="app_name">FAWAZ\'s Android Labs</string>
-    <string name="hello_message">Hello world!</string>
-    <string name="Button1">Button1</string>
-    <string name="Button2">Button2</string>
-    <string name="Button3">Button3</string>
-    <string name="spin_message">spin flag</string>
-
-    <item name="spin_switch" type="id" />
+    <string name="hello_message">Enter Password</string>
+    <string name="button_message">Login</string>
 </resources>
