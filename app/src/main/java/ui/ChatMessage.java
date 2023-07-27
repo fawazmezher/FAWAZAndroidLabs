@@ -1,27 +1,30 @@
 package ui;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
-import java.util.ArrayList;
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
-public class ChatMessage extends ViewModel {
+@Entity
+public class ChatMessage {
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = "id")
+    public int id;
 
-    private String message;
-    private String timeSent;
-    private boolean isSentButton;
-
-
-
-    public ChatMessage(String m, String t, boolean sent) {
-
-        this.message = m;
-        this.timeSent = t;
-        this.isSentButton = sent;
-
+    @ColumnInfo(name="messages")
+    public String messages;
+    @ColumnInfo(name="TimeSent")
+    public String timeSent;
+    @ColumnInfo(name="SendOrReceive")
+    public boolean isSentButton;
+    public ChatMessage(){}
+    public ChatMessage(String messages, String timeSent, boolean isSentButton) {
+        this.messages = messages;
+        this.timeSent = timeSent;
+        this.isSentButton = isSentButton;
     }
 
-    public String getMessage() {
-        return message;
+    public String getMessages() {
+        return messages;
     }
 
     public String getTimeSent() {
@@ -31,4 +34,7 @@ public class ChatMessage extends ViewModel {
     public boolean isSentButton() {
         return isSentButton;
     }
+
+
+
 }
