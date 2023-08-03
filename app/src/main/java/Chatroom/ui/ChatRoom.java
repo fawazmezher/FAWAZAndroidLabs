@@ -13,8 +13,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,7 +28,7 @@ import algonquin.cst2335.mezh0013.R;
 import algonquin.cst2335.mezh0013.databinding.ActivityChatRoomBinding;
 import algonquin.cst2335.mezh0013.databinding.ReceiveMessageBinding;
 import algonquin.cst2335.mezh0013.databinding.SentMessageBinding;
-
+import algonquin.cst2335.mezh0013.databinding.DetailsLayoutBinding;
 
 public class ChatRoom extends AppCompatActivity {
 

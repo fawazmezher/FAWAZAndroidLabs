@@ -14,7 +14,7 @@
         android:theme="@style/Theme.FAWAZsAndroidLabs"
         tools:targetApi="31" >
         <activity
-            android:name="Data.ChatRoom"
+            android:name="Chatroom.ui.ChatRoom"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -24,17 +24,16 @@ public class MessageDetailsFragment extends Fragment {
 
     }
 
-    @Nullable
+
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+
 
         DetailsLayoutBinding binding=DetailsLayoutBinding.inflate(inflater);
 
-        //**********************************
-        binding.getRoot().setBackgroundColor(Color.YELLOW);
-        //*********************************
 
+        binding.getRoot().setBackgroundColor(Color.YELLOW);
         binding.detailsMessage.setText("Message Content : "+selected.getMessages());
         binding.detailsTime.setText("Time : "+selected.getTimeSent());
         binding.detailsSendReceive.setText("Is this msg a sent item : " +String.valueOf(selected.isSentButton()));
