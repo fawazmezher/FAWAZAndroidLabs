@@ -1,21 +1,20 @@
-package ui;
+package Chatroom.ui;
 
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
-
-
-import com.google.android.material.snackbar.Snackbar;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,10 +22,16 @@ import java.util.Date;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import Chatroom.Data.ChatMessage;
+import Chatroom.Data.ChatMessageDAO;
+import Chatroom.Data.ChatViewModel;
+import Chatroom.Data.MessageDatabase;
 import algonquin.cst2335.mezh0013.R;
 import algonquin.cst2335.mezh0013.databinding.ActivityChatRoomBinding;
 import algonquin.cst2335.mezh0013.databinding.ReceiveMessageBinding;
 import algonquin.cst2335.mezh0013.databinding.SentMessageBinding;
+
+
 public class ChatRoom extends AppCompatActivity {
 
     private RecyclerView.Adapter myAdapter;
@@ -60,6 +65,12 @@ public class ChatRoom extends AppCompatActivity {
                 });
             });
         }
+
+        chatModel.selectedMessage.observe(this, (newMessageValue) -> {
+            Log.i("tag", "onCreate: "+newMessageValue.getMessages());
+            MessageDetailsFragment chatFragment = new MessageDetailsFragment(newMessageValue);
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragmentLocation ,chatFragment).addToBackStack("").commit();
+        });
 
         binding.theRecycleView.setAdapter(myAdapter=new RecyclerView.Adapter<MyRowHolder>() {
             @NonNull
@@ -175,46 +186,49 @@ public class ChatRoom extends AppCompatActivity {
 
 
             itemView.setOnClickListener(clk->{
+                int position = getAbsoluteAdapterPosition();
+                ChatMessage selected = messages.get(position);
+                ChatViewModel.selectedMessage.postValue(selected);
 
 
 
 
-                AlertDialog.Builder builder=new AlertDialog.Builder(ChatRoom.this);
-                builder.setMessage("Do you want to Delete this message : "+messageText.getText()).
-                        setTitle("Question").
-                        setNegativeButton("no",(dialog,cl)->{})
-
-                        .setPositiveButton("yes",(dialog,cl)->{
-
-                            int Position=getAbsoluteAdapterPosition();
-                            ChatMessage removedMessage=messages.get(Position);
-
-
-                            thread.execute(() ->
-                            {
-
-
-
-                                mDAO.deleteMessage(removedMessage);
-
-
-
-                            });
-
-                            runOnUiThread( () ->  {
-
-
-                                messages.remove(Position);
-                                myAdapter.notifyItemRemoved(Position);
-
-                            });
-
-                            Snackbar.make(itemView,"You deleted message # "+messageText.getText() ,Snackbar.LENGTH_SHORT)
-                                    .setAction("Undo",c->{
-                                        messages.add(Position,removedMessage);
-                                        myAdapter.notifyItemInserted(Position);
-                                    }).show();
-                        }).create().show();
+//                AlertDialog.Builder builder=new AlertDialog.Builder(ChatRoom.this);
+//                builder.setMessage("Do you want to Delete this message : "+messageText.getText()).
+//                        setTitle("Question").
+//                        setNegativeButton("no",(dialog,cl)->{})
+//
+//                        .setPositiveButton("yes",(dialog,cl)->{
+//
+//                            int Position=getAbsoluteAdapterPosition();
+//                            ChatMessage removedMessage=messages.get(Position);
+//
+//
+//                            thread.execute(() ->
+//                            {
+//
+//
+//
+//                                mDAO.deleteMessage(removedMessage);
+//
+//
+//
+//                            });
+//
+//                            runOnUiThread( () ->  {
+//
+//
+//                                messages.remove(Position);
+//                                myAdapter.notifyItemRemoved(Position);
+//
+//                            });
+//
+//                            Snackbar.make(itemView,"You deleted message # "+messageText.getText() ,Snackbar.LENGTH_SHORT)
+//                                    .setAction("Undo",c->{
+//                                        messages.add(Position,removedMessage);
+//                                        myAdapter.notifyItemInserted(Position);
+//                                    }).show();
+//                        }).create().show();
             });
 
             messageText= itemView.findViewById(R.id.m);

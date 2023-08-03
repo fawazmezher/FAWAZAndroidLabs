@@ -1,4 +1,4 @@
-package ui;
+package Chatroom.Data;
 
 
 import androidx.room.Database;
