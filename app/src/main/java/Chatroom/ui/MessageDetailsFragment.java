@@ -33,10 +33,10 @@ public class MessageDetailsFragment extends Fragment {
         DetailsLayoutBinding binding=DetailsLayoutBinding.inflate(inflater);
 
 
-        binding.getRoot().setBackgroundColor(Color.YELLOW);
+        binding.getRoot().setBackgroundColor(Color.BLUE);
         binding.detailsMessage.setText("Message Content : "+selected.getMessages());
         binding.detailsTime.setText("Time : "+selected.getTimeSent());
-        binding.detailsSendReceive.setText("Is this msg a sent item : " +String.valueOf(selected.isSentButton()));
+        binding.detailsSendReceive.setText("Is this message a sent item : " +String.valueOf(selected.isSentButton()));
         binding.detailsDatabaseId.setText("Id = "+selected.id);
 
         return binding.getRoot();
