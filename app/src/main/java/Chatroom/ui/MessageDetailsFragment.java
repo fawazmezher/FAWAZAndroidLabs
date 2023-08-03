@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-
 import Chatroom.Data.ChatMessage;
 import algonquin.cst2335.mezh0013.databinding.DetailsLayoutBinding;
 
