@@ -1,25 +1,25 @@
 package Chatroom.ui;
-
-
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
-
+import com.google.android.material.snackbar.Snackbar;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
 import Chatroom.Data.ChatMessage;
 import Chatroom.Data.ChatMessageDAO;
 import Chatroom.Data.ChatViewModel;
@@ -32,10 +32,60 @@ import algonquin.cst2335.mezh0013.databinding.DetailsLayoutBinding;
 
 public class ChatRoom extends AppCompatActivity {
 
+
     private RecyclerView.Adapter myAdapter;
     private ArrayList<ChatMessage> messages;
     private ChatMessageDAO mDAO;
     private Executor thread;
+    private ActivityChatRoomBinding binding;
+    private String message;
+
+    MyRowHolder rh;
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.my_menu, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+
+
+
+        if (item.getItemId() == R.id.id_item1) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(ChatRoom.this);
+            builder.setMessage("Do you want to delete this message " + rh.messageText.getText());
+            builder.setTitle("Question");
+            builder.setNegativeButton("No", (dialog, cl) -> {});
+
+            builder.setPositiveButton("Yes", (dialog, cl) -> {
+                ChatMessage toDelete = messages.get(rh.getAbsoluteAdapterPosition());
+                Executor thread1 = Executors.newSingleThreadExecutor();
+                thread1.execute(() -> {
+                    mDAO.deleteMessage(toDelete);
+                    messages.remove(rh.getAbsoluteAdapterPosition());
+                    runOnUiThread(() -> {
+                        myAdapter.notifyDataSetChanged();
+                        Snackbar.make(binding.getRoot(), "You deleted message #" + rh.getAbsoluteAdapterPosition(), Snackbar.LENGTH_LONG)
+                                .setAction("Undo", c -> {
+                                    messages.add(rh.getAbsoluteAdapterPosition(), toDelete);
+                                    myAdapter.notifyItemInserted(rh.getAbsoluteAdapterPosition());
+                                })
+                                .show();
+                    });
+                });
+            });
+            builder.create().show();
+        } else if (item.getItemId() == R.id.id_item2) {
+            message = "Version 1.0, created by Fawaz Mezher";
+            runOnUiThread(() -> {
+                Toast.makeText(this, "You clicked " + message, Toast.LENGTH_SHORT).show();
+            });
+        }
+
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +96,8 @@ public class ChatRoom extends AppCompatActivity {
         ChatViewModel chatModel = new ViewModelProvider(this).get(ChatViewModel.class);
 
         messages= chatModel.messages.getValue();
+        setContentView(binding.getRoot());
+
 
         if (messages==null){
             chatModel.messages.setValue(messages=new  ArrayList<ChatMessage>());
